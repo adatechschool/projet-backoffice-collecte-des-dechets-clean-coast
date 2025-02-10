@@ -6,7 +6,7 @@ session_start();
 $host = 'localhost';
 $dbname = 'gestion_collectes';
 $username = 'root';
-$password = '';
+$password = 'root';
 
 function setEnv()
 {
