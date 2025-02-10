@@ -1,5 +1,52 @@
 <?php
 require 'config.php';
+
+// 2. Afficher la base de données avec les utilisateurs :
+$sql = "SELECT * FROM benevoles"; // Ici on va chercher tous les utilisateurs de notre table users dans notre base de données.
+// C'est une requête SQL qui est stockée
+
+// On met en place la requête
+$req = $pdo->query($sql);
+
+// Tant que tu as une réponse on va fetch => on boucle sur toute les lignes
+// On peut aussi faire un fetchAll()
+while ($rep = $req->fetch())
+{
+    echo $rep['nom'].'<br>';
+}
+// Ça fonctionne pour afficher les bénévoles
+
+// TODO : créer l'ajout d'un user avec exec
+
+// Test insertion avec des données
+// $pdo->exec("INSERT INTO benevoles VALUES (0, 'Gwenaëlle Bussac', 'test@test.fr', '123456', 'participant')"); // Ça fonctionne
+//$pdo->exec("INSERT INTO benevoles VALUES ('Majda Fougou', 'fougou@test.fr', '123456', 'participant')"); // Ça fonctionne pas sans le 0 pour l'auto-incrémentation
+
+// Avec post récupérer les données des inputs
+if (isset($_POST['ajouter']))
+{
+    $name = $_POST['nom'];
+    $email = $_POST['email'];
+    $password = $_POST['mot_de_passe'];
+    $role = $_POST['role'];
+
+    // On prépare notre requête
+    // TODO : renommer ma varaible sql
+    $sqlInsert = $pdo->prepare("INSERT INTO benevoles VALUES (0, :name, :email, :password, :role)");
+    // la méthode permet de vérifier avant d'insérer dans la BDD
+    $sqlInsert->execute(
+        [
+            "name" => $name,
+            "email" => $email,
+            "password" => $password,
+            "role" => $role
+        ]
+    );
+    // => Ça fonctionne !
+}
+
+// Test pour voir si je récupère bien la valeur dans l'input
+//echo $name. $email . $password . $role;
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +62,7 @@ require 'config.php';
 
 <div class="flex h-screen">
     <!-- Barre de navigation -->
-    <div class="bg-cyan-200 text-white w-64 p-6">L
+    <div class="bg-cyan-200 text-white w-64 p-6">
         <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
 
             <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i
@@ -40,7 +87,7 @@ require 'config.php';
 
         <!-- Formulaire d'ajout -->
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-            <form action="user_add.php" method="POST">
+            <form action="user_add.php" method="POST"> <!-- Ici on retrouve ce qu'il faut pour le POST et action qui renvoit le fichier qui lance le code pour ajouter un bénévole -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Nom</label>
                     <input type="text" name="nom"
@@ -72,7 +119,7 @@ require 'config.php';
                 </div>
 
                 <div class="mt-6">
-                    <button type="submit"
+                    <button type="submit" name="ajouter"
                             class="w-full bg-cyan-200 hover:bg-cyan-600 text-white py-3 rounded-lg shadow-md font-semibold">
                         Ajouter le bénévole
                     </button>
