@@ -6,7 +6,16 @@ session_start();
 $host = 'localhost';
 $dbname = 'gestion_collectes';
 $username = 'root';
-$password = 'root';
+$password = '';
+
+function setEnv()
+{
+    $filename = ".env";
+    if(!file_exists($filename))
+    {
+
+    }
+}
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, [
