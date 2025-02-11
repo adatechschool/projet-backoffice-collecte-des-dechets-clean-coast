@@ -1,27 +1,26 @@
 <?php
 require 'config.php';
 
-// 2. Afficher la base de données avec les utilisateurs :
-$sql = "SELECT * FROM benevoles"; // Ici on va chercher tous les utilisateurs de notre table users dans notre base de données.
+// 1. Afficher la base de données avec les utilisateurs/bénévoles :
+$sql = "SELECT * FROM benevoles"; // Ici on va chercher tous les utilisateurs de notre table benevoles dans notre base de données.
 // C'est une requête SQL qui est stockée
 
 // On met en place la requête
-$req = $pdo->query($sql);
+//$req = $pdo->query($sql);
 
 // Tant que tu as une réponse on va fetch => on boucle sur toute les lignes
 // On peut aussi faire un fetchAll()
-while ($rep = $req->fetch())
-{
-    echo $rep['nom'].'<br>';
-}
+//while ($rep = $req->fetch())
+//{
+//    echo $rep['nom'].'<br>';
+//}
 // Ça fonctionne pour afficher les bénévoles
-
-// TODO : créer l'ajout d'un user avec exec
 
 // Test insertion avec des données
 // $pdo->exec("INSERT INTO benevoles VALUES (0, 'Gwenaëlle Bussac', 'test@test.fr', '123456', 'participant')"); // Ça fonctionne
 //$pdo->exec("INSERT INTO benevoles VALUES ('Majda Fougou', 'fougou@test.fr', '123456', 'participant')"); // Ça fonctionne pas sans le 0 pour l'auto-incrémentation
 
+// 2. Insérer les données dans la database
 // Avec post récupérer les données des inputs
 if (isset($_POST['ajouter']))
 {
@@ -32,9 +31,9 @@ if (isset($_POST['ajouter']))
 
     // On prépare notre requête
     // TODO : renommer ma varaible sql
-    $sqlInsert = $pdo->prepare("INSERT INTO benevoles VALUES (0, :name, :email, :password, :role)");
+    $sql_insert = $pdo->prepare("INSERT INTO benevoles VALUES (0, :name, :email, :password, :role)");
     // la méthode permet de vérifier avant d'insérer dans la BDD
-    $sqlInsert->execute(
+    $sql_insert->execute(
         [
             "name" => $name,
             "email" => $email,
@@ -47,6 +46,8 @@ if (isset($_POST['ajouter']))
 
 // Test pour voir si je récupère bien la valeur dans l'input
 //echo $name. $email . $password . $role;
+
+// TODO : ajouter une confirmation d'enregistrement et un message d'erreur s'il y a
 ?>
 
 <!DOCTYPE html>
