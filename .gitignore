@@ -1,5 +1,4 @@
 .idea
 php/config.php
 .env
-.vendor
 /vendor/
