@@ -1,3 +1,25 @@
+<?php
+require 'config.php';
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $nom = $_POST["nom"];
+    $email = $_POST["email"];
+    $mdp = $_POST["mot_de_passe"];
+    $role = $_POST["role"];
+
+    // Insérer la collecte avec le bénévole sélectionné
+    $stmt = $pdo->prepare("INSERT INTO benevoles VALUES (0, :nom, :email, :mdp, :role)");
+    $stmt->execute(
+        [
+            "nom" => $nom,
+            "email" => $email,
+            "mdp" => $mdp,
+            "role" => $role
+        ]
+    );
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
