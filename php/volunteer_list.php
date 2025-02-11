@@ -1,3 +1,8 @@
+<?php
+require 'config.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,7 +15,7 @@
 <body class="bg-gray-100 text-gray-900">
 <div class="flex h-screen">
     <!-- Barre de navigation -->
-    <div class="bg-cyan-200 text-white w-64 p-6">
+    <div class="bg-cyan-500 text-white w-64 p-6">
         <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
             <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i
                             class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
@@ -26,7 +31,7 @@
             <li><a href="my_account.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i
                             class="fas fa-cogs mr-3"></i> Mon compte</a></li>
         <div class="mt-6">
-            <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg shadow-md">
+            <button onclick="logout()" class="w-full bg-red-400 hover:bg-red-500 text-white py-2 rounded-lg shadow-md">
                 Déconnexion
             </button>
         </div>
@@ -54,8 +59,8 @@
                     <td class="py-3 px-4">email@example.com</td>
                     <td class="py-3 px-4">Admin</td>
                     <td class="py-3 px-4 flex space-x-2">
-                        <a href="#"
-                           class="bg-cyan-200 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                        <a href="volunteer_edit.php"
+                           class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                             ✏️ Modifier
                         </a>
                         <a href="#"

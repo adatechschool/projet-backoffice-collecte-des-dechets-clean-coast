@@ -1,31 +1,9 @@
-<?php
-require 'config.php';
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    $nom = $_POST["nom"];
-    $email = $_POST["email"];
-    $mdp = $_POST["mot_de_passe"];
-    $role = $_POST["role"];
-
-    // Insérer la collecte avec le bénévole sélectionné
-    $stmt = $pdo->prepare("INSERT INTO benevoles VALUES (0, :nom, :email, :mdp, :role)");
-    $stmt->execute(
-        [
-            "nom" => $nom,
-            "email" => $email,
-            "mdp" => $mdp,
-            "role" => $role
-        ]
-    );
-}
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un Bénévole</title>
+    <title>Modifier un Bénévole</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 </head>
@@ -33,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <div class="flex h-screen">
     <!-- Barre de navigation -->
-    <div class="bg-cyan-500 text-white w-64 p-6">L
+    <div class="bg-cyan-700 text-white w-64 p-6">
         <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
 
             <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i
@@ -54,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <!-- Contenu principal -->
     <div class="flex-1 p-8 overflow-y-auto">
-        <h1 class="text-4xl font-bold text-blue-800 mb-6">Ajouter un Bénévole</h1>
+        <h1 class="text-4xl font-bold text-blue-800 mb-6">Modifier un Bénévole</h1>
 
         <!-- Formulaire d'ajout -->
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
@@ -92,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <div class="mt-6">
                     <button type="submit"
                             class="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-3 rounded-lg shadow-md font-semibold">
-                        Ajouter le bénévole
+                        Modifier le bénévole
                     </button>
                 </div>
             </form>
@@ -102,4 +80,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 </body>
 </html>
-
