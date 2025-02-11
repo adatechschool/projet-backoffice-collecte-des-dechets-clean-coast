@@ -66,7 +66,7 @@ $benevoles = $query->fetchAll();
                         <td class="py-3 px-4"><?= htmlspecialchars($benevole['email']) ?></td>
                         <td class="py-3 px-4"><?= htmlspecialchars($benevole['role']) ?></td>
                         <td class="py-3 px-4 flex space-x-2">
-                            <a href="#"
+                            <a href="volunteer_edit.php"
                                class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                                 ✏️ Modifier
                             </a>
