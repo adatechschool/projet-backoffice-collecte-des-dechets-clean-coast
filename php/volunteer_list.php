@@ -1,3 +1,11 @@
+<?php
+// Connexion à la BDD :
+require 'config.php';
+
+// TODO: 1. Afficher l'utilisateur choisi (ou courant/connecté)
+// TODO: 2. Pouvoir modifier un élément dans la table
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
