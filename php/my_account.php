@@ -10,7 +10,7 @@
 <div class="flex h-screen">
 
     <!-- Barre de navigation -->
-    <div class="bg-cyan-200 text-white w-64 p-6">
+    <div class="bg-cyan-800 text-white w-64 p-6">
         <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
 
         <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i
@@ -83,7 +83,7 @@
                 <a href="collection_list.php" class="text-sm text-blue-600 hover:underline">Retour à la liste des
                     collectes</a>
                 <button type="button" onclick="updateSettings()"
-                        class="bg-cyan-200 hover:bg-cyan-600 text-white px-6 py-2 rounded-lg shadow-md">
+                        class="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-2 rounded-lg shadow-md">
                     Mettre à jour
                 </button>
             </div>
