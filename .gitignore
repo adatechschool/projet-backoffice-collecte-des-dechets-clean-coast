@@ -2,4 +2,4 @@
 
 php/config.php
 .env
-#coucou
+.vendor
