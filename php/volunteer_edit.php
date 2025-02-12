@@ -1,4 +1,53 @@
+<?php
 
+require "config.php";
+
+// 1. On vérifie que dans l'URL on a l'id du bénévole
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header("Location: volunteer_list.php");
+    exit;
+}
+
+$currentVolunteerId = $_GET['id'];
+//echo $currentVolunteerId;
+
+// 2. On récupère le bénévole sélectionné
+$stmt = $pdo->prepare("SELECT id, nom, email, role FROM benevoles WHERE id = ?");
+$stmt->execute([$currentVolunteerId]);
+$currentVolunteer = $stmt->fetch(); // Ici pas bien compris pourquoi ne met pas un "fetchAll()"
+
+// Récupérer l'enum de la table
+// Je vérifie le role du bénévole en BDD
+//echo $currentVolunteer['role'];
+$role = $currentVolunteer['role'];
+
+// Plus loin dans le code au niveau du select.
+// On a fait une condition ternaire pour afficher le role
+// Pour que la condition ternaire soit plus claire, c'est comme si on avait écrit :
+//if ($role === 'participant') {
+//    echo 'selected';
+//} else {
+//    echo '';
+//}
+// Attention le selected est "associé" au texte mis en dur dans le html "Admin"
+
+// TODO: Ajouter une gestion des erreur s'il ne trouve pas le bénévole dans le tableau
+// Ajoute une condition qui vérifie l'URL
+
+// 3. On met à jour le bénévole => EDITION
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $nom = $_POST['nom'];
+    $email = $_POST['email'];
+    $role = $_POST['role'];
+
+    $stmt_update = $pdo->prepare("UPDATE benevoles SET nom = ?, email = ?, role = ? WHERE id = ?");
+    $stmt_update->execute([$nom, $email, $role, $currentVolunteerId]);
+
+    // Ici sert à rediriger quand le formulaire est envoyé
+    header("Location: volunteer_list.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -35,12 +84,13 @@
     <div class="flex-1 p-8 overflow-y-auto">
         <h1 class="text-4xl font-bold text-blue-800 mb-6">Modifier un Bénévole</h1>
 
-        <!-- Formulaire d'ajout -->
+        <!-- Formulaire de modification -->
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-            <form action="user_add.php" method="POST">
+            <form method="POST">
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Nom</label>
                     <input type="text" name="nom"
+                           value="<?= htmlspecialchars($currentVolunteer['nom']) ?>"
                            class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                            placeholder="Nom du bénévole" required>
                 </div>
@@ -48,6 +98,7 @@
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Email</label>
                     <input type="email" name="email"
+                           value="<?= htmlspecialchars($currentVolunteer['email']) ?>"
                            class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                            placeholder="Email du bénévole" required>
                 </div>
@@ -56,8 +107,8 @@
                     <label class="block text-gray-700 font-medium">Rôle</label>
                     <select name="role"
                             class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="participant">Participant</option>
-                        <option value="admin">Admin</option>
+                        <option value="participant" <?php echo ($role === 'participant') ? 'selected' : ''; ?> >Participant</option>
+                        <option value="admin" <?php echo ($role === 'admin') ? 'selected' : ''; ?> >Admin</option>
                     </select>
                 </div>
 
