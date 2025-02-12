@@ -1,7 +1,7 @@
-<?php
-require 'config.php';
 
-?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,7 +16,7 @@ require 'config.php';
 
 <div class="flex h-screen">
     <!-- Barre de navigation -->
-    <div class="bg-cyan-700 text-white w-64 p-6">
+    <div class="bg-cyan-800 text-white w-64 p-6">
         <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
 
             <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i
@@ -41,7 +41,7 @@ require 'config.php';
 
         <!-- Formulaire d'ajout -->
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-            <form action="user_add.php" method="POST">
+            <form action="volunteer_edit.php" method="POST">
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Nom</label>
                     <input type="text" name="nom"
@@ -57,13 +57,6 @@ require 'config.php';
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">Mot de passe</label>
-                    <input type="password" name="mot_de_passe"
-                           class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                           placeholder="Mot de passe" required>
-                </div>
-
-                <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Rôle</label>
                     <select name="role"
                             class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -75,7 +68,7 @@ require 'config.php';
                 <div class="mt-6">
                     <button type="submit"
                             class="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-3 rounded-lg shadow-md font-semibold">
-                        Modifier le bénévole
+                        Modifier un bénévole
                     </button>
                 </div>
             </form>
@@ -85,3 +78,5 @@ require 'config.php';
 
 </body>
 </html>
+
+
