@@ -2,8 +2,8 @@
 
 require 'config.php';
 
-// Afficher les bénévoles (nom, email et role)
-$query = $pdo->prepare("SELECT nom, email, role FROM benevoles");
+// Afficher les bénévoles (id, nom, email et role)
+$query = $pdo->prepare("SELECT id, nom, email, role FROM benevoles");
 $query->execute();
 
 $benevoles = $query->fetchAll();
@@ -66,7 +66,7 @@ $benevoles = $query->fetchAll();
                         <td class="py-3 px-4"><?= htmlspecialchars($benevole['email']) ?></td>
                         <td class="py-3 px-4"><?= htmlspecialchars($benevole['role']) ?></td>
                         <td class="py-3 px-4 flex space-x-2">
-                            <a href="volunteer_edit.php"
+                            <a href="volunteer_edit.php?id=<?= $benevole['id'] ?>"
                                class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                                 ✏️ Modifier
                             </a>

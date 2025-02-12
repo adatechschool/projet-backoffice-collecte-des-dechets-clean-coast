@@ -1,10 +1,48 @@
+<?php
+require 'config.php';
 
+// Vérifier si un ID de collecte est fourni
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header("Location: volunteer_list.php");
+    exit;
+} 
+
+$id = $_GET['id'];
+
+// Récupérer les informations de la collecte
+$stmt = $pdo->prepare("SELECT id, nom, email, role FROM benevoles WHERE id = ?");
+$stmt->execute([$id]);
+$benevole = $stmt->fetch();
+
+if (!$benevole) {
+    header("Location: volunteer_list.php");
+    exit;
+}
+
+// Récupérer la liste des bénévoles
+// $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
+// $stmt_benevoles->execute();
+// $benevoles = $stmt_benevoles->fetchAll();
+
+// Mettre à jour la collecte
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $nom = $_POST["nom"];
+    $email = $_POST["email"];
+    $role = $_POST["role"];
+
+    $stmt = $pdo->prepare("UPDATE benevoles SET nom = ?, email = ?, role = ? WHERE id = ?");
+    $stmt->execute([$nom, $email, $role, $id]);
+
+    header("Location: volunteer_list.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier un Bénévole</title>
+    <title>Modifier un bénévole</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 </head>
@@ -33,31 +71,30 @@
 
     <!-- Contenu principal -->
     <div class="flex-1 p-8 overflow-y-auto">
-        <h1 class="text-4xl font-bold text-blue-800 mb-6">Modifier un Bénévole</h1>
+        <h1 class="text-4xl font-bold text-blue-800 mb-6">Modifier un bénévole</h1>
 
         <!-- Formulaire d'ajout -->
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-            <form action="user_add.php" method="POST">
+            <form action="volunteer_edit.php" method="POST">
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Nom</label>
-                    <input type="text" name="nom"
+                    <input type="text" name="nom" value="<?= htmlspecialchars($benevole['nom']) ?>" required
                            class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                           placeholder="Nom du bénévole" required>
+                           placeholder="Nom du bénévole">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Email</label>
-                    <input type="email" name="email"
+                    <input type="email" name="email" value="<?= htmlspecialchars($benevole['email']) ?>" required
                            class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                           placeholder="Email du bénévole" required>
+                           placeholder="Email du bénévole">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Rôle</label>
                     <select name="role"
                             class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="participant">Participant</option>
-                        <option value="admin">Admin</option>
+                        <option value=""><?= htmlspecialchars($benevole['role']) ?>"</option>
                     </select>
                 </div>
 
