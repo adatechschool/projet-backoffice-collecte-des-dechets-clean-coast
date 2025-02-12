@@ -1,7 +1,6 @@
 <?php
 require 'config.php';
 
-// Vérifier si un ID de collecte est fourni
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: volunteer_list.php");
     exit;
@@ -9,7 +8,6 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id = $_GET['id'];
 
-// Récupérer les informations de la collecte
 $stmt = $pdo->prepare("SELECT id, nom, email, role FROM benevoles WHERE id = ?");
 $stmt->execute([$id]);
 $benevole = $stmt->fetch();
@@ -19,12 +17,6 @@ if (!$benevole) {
     exit;
 }
 
-// Récupérer la liste des bénévoles
-// $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
-// $stmt_benevoles->execute();
-// $benevoles = $stmt_benevoles->fetchAll();
-
-// Mettre à jour la collecte
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nom = $_POST["nom"];
     $email = $_POST["email"];
@@ -75,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <!-- Formulaire d'ajout -->
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-            <form action="volunteer_edit.php" method="POST">
+            <form method="POST">
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Nom</label>
                     <input type="text" name="nom" value="<?= htmlspecialchars($benevole['nom']) ?>" required
@@ -94,7 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <label class="block text-gray-700 font-medium">Rôle</label>
                     <select name="role"
                             class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value=""><?= htmlspecialchars($benevole['role']) ?>"</option>
+                        <option value="participant" <?php if($benevole["role"] === "participant"){echo 'selected';} else{echo '';}?>>Participant</option>
+                        <option value="admin" <?php if($benevole["role"] === "admin"){echo 'selected';} else{echo '';}?>>Admin</option>
                     </select>
                 </div>
 
