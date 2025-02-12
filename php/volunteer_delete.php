@@ -2,8 +2,7 @@
 
 require 'config.php';
 
-//$currentVolunteerId = $_GET['id'];
-//echo $currentVolunteerId;
+$currentVolunteerId = $_GET['id'];
 
 if (isset($_GET['id'])) {
     $stmt = $pdo->prepare("DELETE FROM benevoles WHERE id = ?");
