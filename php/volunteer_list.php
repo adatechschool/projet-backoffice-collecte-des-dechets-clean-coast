@@ -69,7 +69,7 @@ $benevoles = $query->fetchAll();
                         <a href="volunteer_edit.php?id=<?= $benevole['id'] ?>" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                                 ✏️ Modifier
                             </a>
-                            <a href="#"
+                            <a href="volunteer_delete.php?id=<?= $benevole['id'] ?>"
                                class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200">
                                 🗑️ Supprimer
                             </a>

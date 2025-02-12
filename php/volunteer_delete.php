@@ -9,7 +9,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
 
-        $stmt = $pdo->prepare("DELETE FROM collectes WHERE id = :id");
+        $stmt = $pdo->prepare("DELETE FROM benevoles WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
