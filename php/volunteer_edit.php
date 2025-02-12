@@ -1,5 +1,43 @@
 
+<?php
+require 'config.php';
 
+// Vérifier si un ID de collecte est fourni
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header("Location: volunteer_list.php");
+    exit;
+}
+
+$id = $_GET['id'];
+
+// Récupérer les informations du benevole
+$stmt = $pdo->prepare("SELECT * FROM benevoles WHERE id = ?");
+$stmt->execute([$id]);
+$benevole = $stmt->fetch();
+
+if (!$benevole) {
+    header("Location: volunteer_list.php");
+    exit;
+}
+
+// // Récupérer la liste des bénévoles
+// $stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
+// $stmt_benevoles->execute();
+// $benevoles = $stmt_benevoles->fetchAll();
+
+// Mettre à jour le benevole
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $nom = $_POST["nom"];
+    $email = $_POST["email"];
+    $role = $_POST["role"];
+    
+    $stmt = $pdo->prepare("UPDATE benevoles SET nom = ?, email = ?, role = ? WHERE id = ?");
+    $stmt->execute([$nom, $email, $role, $id]);
+
+    header("Location: volunteer_list.php");
+    exit;
+}
+?>
 
 
 
@@ -44,14 +82,14 @@
             <form action="volunteer_edit.php" method="POST">
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Nom</label>
-                    <input type="text" name="nom"
+                    <input type="text" name="nom" value="<?= htmlspecialchars($benevole['nom']) ?>"
                            class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                            placeholder="Nom du bénévole" required>
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Email</label>
-                    <input type="email" name="email"
+                    <input type="email" name="email" value="<?= htmlspecialchars($benevole['email']) ?>"
                            class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                            placeholder="Email du bénévole" required>
                 </div>
@@ -59,10 +97,11 @@
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Rôle</label>
                     <select name="role"
-                            class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="participant">Participant</option>
-                        <option value="admin">Admin</option>
-                    </select>
+        class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <option value="participant" <?= ($benevole['role'] === 'participant') ? 'selected' : '' ?>>Participant</option>
+    <option value="admin" <?= ($benevole['role'] === 'admin') ? 'selected' : '' ?>>Admin</option>
+</select>
+
                 </div>
 
                 <div class="mt-6">
