@@ -1,14 +1,3 @@
-
-<?php
-
-require 'config.php';
-
-// Afficher les bénévoles (nom, email et role)
-$query = $pdo->prepare("SELECT id, nom, email, role FROM benevoles");
-$query->execute();
-$benevoles = $query->fetchAll();
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -60,22 +49,21 @@ $benevoles = $query->fetchAll();
                 </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-300">
-                <?php foreach ($benevoles as $benevole) : ?>
-                    <tr class="hover:bg-gray-100 transition duration-200">
-                        <td class="py-3 px-4"><?= htmlspecialchars($benevole['nom']) ?></td>
-                        <td class="py-3 px-4"><?= htmlspecialchars($benevole['email']) ?></td>
-                        <td class="py-3 px-4"><?= htmlspecialchars($benevole['role']) ?></td>
-                        <td class="py-3 px-4 flex space-x-2">
-                        <a href="volunteer_edit.php?id=<?= $benevole['id'] ?>" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
-                                ✏️ Modifier
-                            </a>
-                            <a href="volunteer_delete.php?id=<?= $benevole['id'] ?>"
-                               class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200">
-                                🗑️ Supprimer
-                            </a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+                <tr class="hover:bg-gray-100 transition duration-200">
+                    <td class="py-3 px-4">Nom du bénévole</td>
+                    <td class="py-3 px-4">email@example.com</td>
+                    <td class="py-3 px-4">Admin</td>
+                    <td class="py-3 px-4 flex space-x-2">
+                        <a href="#"
+                           class="bg-cyan-200 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                            ✏️ Modifier
+                        </a>
+                        <a href="#"
+                           class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200">
+                            🗑️ Supprimer
+                        </a>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

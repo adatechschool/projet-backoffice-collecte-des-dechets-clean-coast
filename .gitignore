@@ -1,5 +1,5 @@
 .idea
-
 php/config.php
 .env
-#coucou
+.vendor
+/vendor/

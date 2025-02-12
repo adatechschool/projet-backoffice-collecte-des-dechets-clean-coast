@@ -1,7 +1,7 @@
 <?php
 require 'config.php';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
     $nom = $_POST["nom"];
     $email = $_POST["email"];
@@ -10,15 +10,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Insérer la collecte avec le bénévole sélectionné
     $stmt = $pdo->prepare("INSERT INTO benevoles VALUES (0, :nom, :email, :mdp, :role)");
-    $stmt->execute(
+    if(!$stmt->execute(
         [
             "nom" => $nom,
             "email" => $email,
             "mdp" => $mdp,
             "role" => $role
         ]
-    );
+        )){
+            die("Impossible d'ajouter un bénévole");
+        }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -33,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <div class="flex h-screen">
     <!-- Barre de navigation -->
-    <div class="bg-cyan-500 text-white w-64 p-6">L
+    <div class="bg-cyan-800 text-white w-64 p-6">L
         <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
 
             <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i

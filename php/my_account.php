@@ -10,7 +10,7 @@
 <div class="flex h-screen">
 
     <!-- Barre de navigation -->
-    <div class="bg-cyan-600 text-white w-64 p-6">
+    <div class="bg-cyan-800 text-white w-64 p-6">
         <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
 
         <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i
