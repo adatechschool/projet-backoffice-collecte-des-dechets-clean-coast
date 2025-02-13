@@ -7,6 +7,17 @@ $query = $pdo->prepare("SELECT id, nom, email, role FROM benevoles");
 $query->execute();
 
 $benevoles = $query->fetchAll();
+
+// 1. Récupérer le bénévole avec ses collectes associées
+//$stmt_collectes = $pdo->query("
+//    SELECT c.lieu
+//    FROM collectes c
+//    RIGHT JOIN benevoles b ON c.id_benevole = 18
+//");
+//
+//$stmt_collectes->execute();
+//$collectes = $stmt_collectes->fetchAll();
+//var_dump($collectes);
 ?>
 
 <!DOCTYPE html>

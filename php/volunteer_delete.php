@@ -18,4 +18,3 @@ if (isset($_GET['id'])) {
     echo "ID invalide";
 }
 ?>
-
