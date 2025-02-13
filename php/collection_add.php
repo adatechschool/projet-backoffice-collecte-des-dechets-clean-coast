@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die('Erreur lors de l\'insertion dans la base de données.');
     }
 
-    header("Location: collection_list.php");
+    header("Location: collection_list.php?success");
     exit;
 }
 
