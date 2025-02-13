@@ -98,6 +98,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <?php endforeach; ?>
                     </select>
                 </div>
+                <div>
+                    <select name="type-de-déchet" class="w-full p-2 border border-gray-300 rounded-lg">
+                    <option value="">-- Veuillez choisir le type de déchet --</option>
+                      <option value="plastique">Plastique</option>
+                      <option value="verre">Verre</option>
+                      <option value="métal">Métal</option>
+                      <option value="papier">Papier</option>
+                      <option value="organique">Organique</option>
+                    </select>
+                    <br>
+                <input type="number"  min="0" step="0.01" name="quantité"  placeholder="Quantité (kg)" class="w-full p-2 border border-gray-300 rounded-lg" required>
+            </div>
+        </div>
+        <br>
                 <div class="flex justify-end space-x-4">
                     <a href="collection_list.php" class="bg-gray-500 text-white px-4 py-2 rounded-lg">Annuler</a>
                     <button type="submit" class="bg-cyan-500 text-white px-4 py-2 rounded-lg">Modifier</button>

@@ -95,6 +95,7 @@ error_reporting(E_ALL);
                     <th class="py-3 px-4 text-left">Date</th>
                     <th class="py-3 px-4 text-left">Lieu</th>
                     <th class="py-3 px-4 text-left">Bénévole Responsable</th>
+                    <th class="py-3 px-4 text-left">Type de déchet</th>
                     <th class="py-3 px-4 text-left">Actions</th>
                 </tr>
                 </thead>
@@ -106,6 +107,7 @@ error_reporting(E_ALL);
                         <td class="py-3 px-4">
                             <?= $collecte['nom'] ? htmlspecialchars($collecte['nom']) : 'Aucun bénévole' ?>
                         </td>
+                        <td class="py-3 px-4"><?= htmlspecialchars($dechets_collectes['type_dechet']) ?></td>
                         <td class="py-3 px-4 flex space-x-2">
                             <a href="collection_edit.php?id=<?= $collecte['id'] ?>" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                                 ✏️ Modifier
