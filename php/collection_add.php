@@ -10,7 +10,7 @@ $stmt_benevoles->execute();
 $benevoles = $stmt_benevoles->fetchAll();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $date = $_POST["date"];
+    $date = $_POST["date"]; 
     $lieu = $_POST["lieu"];
     $benevole_id = $_POST["benevole"];  // ID du bénévole choisi, modifié ici pour correspondre au formulaire
     $type_dechet = $_POST["type-de-dechet"];
@@ -110,17 +110,23 @@ $dechets = $stmt_dechets->fetchAll();
                     </select>
                 </div>
 
-                <!-- Section déchets -->
+                <!-- Type de déchet -->
                 <div>
-                    <select name="type-de-dechet" class="w-full p-2 border border-gray-300 rounded-lg" required>
-                        <option value="">-- Veuillez choisir le type de déchet --</option>
-                        <?php foreach ($dechets as $dechet) : ?>
-                        <option><?= htmlspecialchars($dechet['type_dechet']) ?></option>
+                    <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
+                    <select name="type-de-dechet" required
+                            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Sélectionner un type de déchet</option>
+                        <?php foreach ($dechets as $dechet): ?>
+                            <option>
+                                <?= htmlspecialchars($dechet['type_dechet']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
+                <!-- Quantité de dechet -->
                 <div>
+                    <label class="block text-sm font-medium text-gray-700">Quantité de déchet (en kg):</label>
                     <input type="number"  min="0" step="0.01" name="quantite"  placeholder="Quantité (kg)" class="w-full p-2 border border-gray-300 rounded-lg" required>
                 </div>
 
