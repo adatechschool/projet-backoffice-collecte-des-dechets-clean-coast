@@ -23,6 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Location: collection_list.php");
     exit;
 }
+
+// Récupère les deux dernières collectes
+$stmt_collectes = $pdo->query("SELECT date_collecte, lieu FROM collectes ORDER BY DESC date_collecte LIMIT 2");
+$stmt_collectes->execute();
+$collectes = $stmt_collectes->fetchAll();
+//var_dump($collectes);
 ?>
 
 <!DOCTYPE html>
@@ -90,6 +96,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </option>
                         <?php endforeach; ?>
                     </select>
+                </div>
+
+                <!-- Tableau des collectes passées -->
+                <div class="overflow-hidden rounded-lg shadow-lg bg-white">
+                    <table class="w-full table-auto border-collapse">
+                        <thead class="bg-gray-500 text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left">Lieu de la collecte</th>
+                            <th class="py-3 px-4 text-left">Quantité de déchets collectés</th>
+                            <th class="py-3 px-4 text-left">Date</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-300">
+                        <?php foreach ($collectes as $collecte) : ?>
+                        <tr class="hover:bg-gray-100 transition duration-200">
+                            <td class="py-3 px-4"><?= htmlspecialchars($collecte['lieu']); ?></td>
+                            <td class="py-3 px-4">4.5 kg</td>
+                            <td class="py-3 px-4"><?= htmlspecialchars($collecte['date_collecte']); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
 
                 <!-- Boutons -->
