@@ -10,13 +10,32 @@ $stmt_benevoles->execute();
 $benevoles = $stmt_benevoles->fetchAll();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $date = $_POST["date"];
+    $date = $_POST["date"]; 
     $lieu = $_POST["lieu"];
     $benevole_id = $_POST["benevole"];  // ID du bénévole choisi, modifié ici pour correspondre au formulaire
 
     // Insérer la collecte avec le bénévole sélectionné
     $stmt = $pdo->prepare("INSERT INTO collectes (date_collecte, lieu, id_benevole) VALUES (?, ?, ?)");
     if (!$stmt->execute([$date, $lieu, $benevole_id])) {
+        die('Erreur lors de l\'insertion dans la base de données.');
+    }
+
+    header("Location: collection_list.php");
+    exit;
+}
+
+$stmt_collectes = $pdo->query("SELECT id, type_dechet, quantite_kg FROM dechets_collectes");
+$stmt_collectes->execute();
+$dechets = $stmt_collectes->fetchAll();
+// $benevole_id = $_POST["benevole"];
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $type_dechet = $_POST["type-de-dechet"];
+    $quantite_dechet = $_POST["quantite"];
+
+    // Insérer la collecte avec le bénévole sélectionné
+    $stmt = $pdo->prepare("INSERT INTO dechets_collecte (type_dechet, quantite_kg) VALUES (?, ?)");
+    if (!$stmt->execute([$type_dechet, $quantite_dechet])) {
         die('Erreur lors de l\'insertion dans la base de données.');
     }
 
@@ -90,6 +109,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </option>
                         <?php endforeach; ?>
                     </select>
+                </div>
+
+                <!-- Type de déchet -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
+                    <select name="type-de-dechet" required
+                            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Sélectionner un type de déchet</option>
+                        <?php foreach ($dechets as $dechet): ?>
+                            <option>
+                                <?= htmlspecialchars($dechet['type_dechet']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <!-- Quantité de dechet -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Quantité de déchet (en kg):</label>
+                    <input type="number" name="quantite" required
+                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
                 <!-- Boutons -->
