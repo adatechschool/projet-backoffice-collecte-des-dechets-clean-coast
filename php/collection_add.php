@@ -25,10 +25,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 // Récupère les deux dernières collectes
-$stmt_collectes = $pdo->query("SELECT date_collecte, lieu FROM collectes ORDER BY DESC date_collecte LIMIT 2");
+$stmt_collectes = $pdo->query("
+    SELECT c.id, c.date_collecte, c.lieu, 
+           SUM(d.quantite_kg) as total_dechets, 
+           b.nom as nom_benevole
+    FROM collectes c
+    LEFT JOIN dechets_collectes d ON c.id = d.id_collecte
+    LEFT JOIN benevoles b ON c.id_benevole = b.id
+    GROUP BY c.id, c.date_collecte, c.lieu, b.nom
+    ORDER BY c.date_collecte
+    LIMIT 2;
+");
+
 $stmt_collectes->execute();
 $collectes = $stmt_collectes->fetchAll();
-//var_dump($collectes);
 ?>
 
 <!DOCTYPE html>
@@ -98,6 +108,8 @@ $collectes = $stmt_collectes->fetchAll();
                     </select>
                 </div>
 
+                <h3 class="text-2xl font-bold text-blue-900 mb-6">Les collectes les plus anciennes</h3>
+
                 <!-- Tableau des collectes passées -->
                 <div class="overflow-hidden rounded-lg shadow-lg bg-white">
                     <table class="w-full table-auto border-collapse">
@@ -106,14 +118,16 @@ $collectes = $stmt_collectes->fetchAll();
                             <th class="py-3 px-4 text-left">Lieu de la collecte</th>
                             <th class="py-3 px-4 text-left">Quantité de déchets collectés</th>
                             <th class="py-3 px-4 text-left">Date</th>
+                            <th class="py-3 px-4 text-left">Bénévole</th>
                         </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-300">
                         <?php foreach ($collectes as $collecte) : ?>
                         <tr class="hover:bg-gray-100 transition duration-200">
                             <td class="py-3 px-4"><?= htmlspecialchars($collecte['lieu']); ?></td>
-                            <td class="py-3 px-4">4.5 kg</td>
+                            <td class="py-3 px-4"><?= $collecte['total_dechets'] ? htmlspecialchars($collecte['total_dechets']) . ' kg' : 'Aucun déchet enregistré'; ?></td>
                             <td class="py-3 px-4"><?= htmlspecialchars($collecte['date_collecte']); ?></td>
+                            <td class="py-3 px-4"><?= htmlspecialchars($collecte['nom_benevole']); ?></td>
                         </tr>
                         <?php endforeach; ?>
                         </tbody>
