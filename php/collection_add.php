@@ -103,9 +103,9 @@ $dechets = $stmt_dechets->fetchAll();
                             class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Sélectionner un bénévole</option>
                         <?php foreach ($benevoles as $benevole): ?>
-                            <?php foreach ($benevoles as $benevole): ?>
-                            <option value="<?= $benevole['id'] ?>"><?= htmlspecialchars($benevole['nom']) ?></option>
-                        
+                            <option value="<?= $benevole['id'] ?>" <?= $benevole['id'] ==  'selected' ?>>
+                                <?= htmlspecialchars($benevole['nom']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
