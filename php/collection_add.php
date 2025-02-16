@@ -9,6 +9,29 @@ $stmt_benevoles = $pdo->query("SELECT id, nom FROM benevoles ORDER BY nom");
 $stmt_benevoles->execute();
 $benevoles = $stmt_benevoles->fetchAll();
 
+// Récupère la liste des déchets dans la table dechets_collectes et on affiche dans le select
+// Peut-être passer par une nouvelle table ?
+$stmt_dechets = $pdo->query("SHOW COLUMNS FROM dechets_collectes WHERE Field = 'type_dechet'");
+$stmt_dechets->execute();
+$dechets = $stmt_dechets->fetchAll();
+var_dump($dechets);
+
+// Récupère les deux dernières collectes
+$stmt_collectes = $pdo->query("
+    SELECT c.id, c.date_collecte, c.lieu, 
+           SUM(d.quantite_kg) as total_dechets, 
+           b.nom as nom_benevole
+    FROM collectes c
+    LEFT JOIN dechets_collectes d ON c.id = d.id_collecte
+    LEFT JOIN benevoles b ON c.id_benevole = b.id
+    GROUP BY c.id, c.date_collecte, c.lieu, b.nom
+    ORDER BY c.date_collecte
+    LIMIT 2;
+");
+
+$stmt_collectes->execute();
+$collectes = $stmt_collectes->fetchAll();
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $date = $_POST["date"];
     $lieu = $_POST["lieu"];
@@ -33,30 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Location: collection_list.php?success");
     exit;
 }
-
-// Récupère la liste des déchets dans la table dechets_collectes et on affiche dans le select
-$stmt_dechets = $pdo->query("SELECT id, type_dechet FROM dechets_collectes");
-$stmt_dechets->execute();
-$dechets = $stmt_dechets->fetchAll();
-
-// Envoyer la quantité de déchets et son type dans de dechets_collectes
-
-
-// Récupère les deux dernières collectes
-$stmt_collectes = $pdo->query("
-    SELECT c.id, c.date_collecte, c.lieu, 
-           SUM(d.quantite_kg) as total_dechets, 
-           b.nom as nom_benevole
-    FROM collectes c
-    LEFT JOIN dechets_collectes d ON c.id = d.id_collecte
-    LEFT JOIN benevoles b ON c.id_benevole = b.id
-    GROUP BY c.id, c.date_collecte, c.lieu, b.nom
-    ORDER BY c.date_collecte
-    LIMIT 2;
-");
-
-$stmt_collectes->execute();
-$collectes = $stmt_collectes->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -74,14 +73,14 @@ $collectes = $stmt_collectes->fetchAll();
     <div class="bg-cyan-800 text-white w-64 p-6">
         <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
 
-            <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
-            <li><a href="volunteer_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fa-solid fa-list mr-3"></i> Liste des bénévoles</a></li>
-            <li>
-                <a href="user_add.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg">
-                    <i class="fas fa-user-plus mr-3"></i> Ajouter un bénévole
-                </a>
-            </li>
-            <li><a href="my_account.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-cogs mr-3"></i> Mon compte</a></li>
+        <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
+        <li><a href="volunteer_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fa-solid fa-list mr-3"></i> Liste des bénévoles</a></li>
+        <li>
+            <a href="user_add.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg">
+                <i class="fas fa-user-plus mr-3"></i> Ajouter un bénévole
+            </a>
+        </li>
+        <li><a href="my_account.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-cogs mr-3"></i> Mon compte</a></li>
 
         <div class="mt-6">
             <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg shadow-md">
@@ -132,9 +131,9 @@ $collectes = $stmt_collectes->fetchAll();
                     <select name="type-de-dechet" required
                             class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Sélectionner un type de déchet</option>
-                        <?php foreach ($dechets as $dechet): ?>
-                            <option>
-                                <?= htmlspecialchars($dechet['type_dechet']) ?>
+                        <?php foreach($valeurs as $valeur): ?>
+                            <option value="<?php echo htmlspecialchars($valeur); ?>">
+                                <?php echo htmlspecialchars(ucfirst($valeur)); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -148,9 +147,6 @@ $collectes = $stmt_collectes->fetchAll();
 
                 <button type="button" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow">
                     ➕ Ajouter un autre type de déchet
-                </button>
-                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg shadow">
-                    ➕ Ajouter un nouveau type de déchet
                 </button>
 
                 <h3 class="text-2xl font-bold text-blue-900 mb-6">Les collectes les plus anciennes</h3>
@@ -168,12 +164,12 @@ $collectes = $stmt_collectes->fetchAll();
                         </thead>
                         <tbody class="divide-y divide-gray-300">
                         <?php foreach ($collectes as $collecte) : ?>
-                        <tr class="hover:bg-gray-100 transition duration-200">
-                            <td class="py-3 px-4"><?= htmlspecialchars($collecte['lieu']); ?></td>
-                            <td class="py-3 px-4"><?= $collecte['total_dechets'] ? htmlspecialchars($collecte['total_dechets']) . ' kg' : 'Aucun déchet enregistré'; ?></td>
-                            <td class="py-3 px-4"><?= htmlspecialchars($collecte['date_collecte']); ?></td>
-                            <td class="py-3 px-4"><?= htmlspecialchars($collecte['nom_benevole']); ?></td>
-                        </tr>
+                            <tr class="hover:bg-gray-100 transition duration-200">
+                                <td class="py-3 px-4"><?= htmlspecialchars($collecte['lieu']); ?></td>
+                                <td class="py-3 px-4"><?= $collecte['total_dechets'] ? htmlspecialchars($collecte['total_dechets']) . ' kg' : 'Aucun déchet enregistré'; ?></td>
+                                <td class="py-3 px-4"><?= htmlspecialchars($collecte['date_collecte']); ?></td>
+                                <td class="py-3 px-4"><?= htmlspecialchars($collecte['nom_benevole']); ?></td>
+                            </tr>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
