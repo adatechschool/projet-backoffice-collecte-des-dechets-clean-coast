@@ -146,6 +146,13 @@ $collectes = $stmt_collectes->fetchAll();
                     <input type="number"  min="0" step="0.01" name="quantite"  placeholder="Quantité (kg)" class="w-full p-2 border border-gray-300 rounded-lg" required>
                 </div>
 
+                <button type="button" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow">
+                    ➕ Ajouter un autre type de déchet
+                </button>
+                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg shadow">
+                    ➕ Ajouter un nouveau type de déchet
+                </button>
+
                 <h3 class="text-2xl font-bold text-blue-900 mb-6">Les collectes les plus anciennes</h3>
 
                 <!-- Tableau des collectes passées -->
