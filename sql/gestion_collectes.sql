@@ -152,7 +152,8 @@ ALTER TABLE `dechets_collectes`
 -- Contraintes pour la table `collectes`
 --
 ALTER TABLE `collectes`
-  ADD CONSTRAINT `collectes_ibfk_1` FOREIGN KEY (`id_benevole`) REFERENCES `benevoles` (`id`);
+  ADD CONSTRAINT `collectes_ibfk_1` FOREIGN KEY (`id_benevole`) REFERENCES `benevoles` (`id`)
+    ON DELETE SET NULL ;
 
 --
 -- Contraintes pour la table `dechets_collectes`

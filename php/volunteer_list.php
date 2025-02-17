@@ -3,7 +3,7 @@
 require 'config.php';
 
 // Afficher les bénévoles (id, nom, email et role)
-$query = $pdo->prepare("SELECT id, nom, email, role FROM benevoles");
+$query = $pdo->prepare("SELECT id, nom, email, role FROM benevoles ORDER BY nom");
 $query->execute();
 
 $benevoles = $query->fetchAll();

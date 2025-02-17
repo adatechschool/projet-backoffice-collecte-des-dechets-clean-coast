@@ -20,9 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         )){
             die("Impossible d'ajouter un bénévole");
         }
-    
-        header("Location: volunteer_list.php");
-        exit;
+
+    header("Location: volunteer_list.php");
+    exit;
 }
 
 ?>
