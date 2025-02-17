@@ -5,16 +5,15 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Récupérer la liste des bénévoles
-$stmt_benevoles = $pdo->query("SELECT id, nom FROM benevoles ORDER BY nom");
+$stmt_benevoles = $pdo->prepare("SELECT id, nom FROM benevoles ORDER BY nom");
 $stmt_benevoles->execute();
 $benevoles = $stmt_benevoles->fetchAll();
 
 // Récupère la liste des déchets dans la table dechets_collectes et on affiche dans le select
 // Peut-être passer par une nouvelle table ?
-$stmt_dechets = $pdo->query("SHOW COLUMNS FROM dechets_collectes WHERE Field = 'type_dechet'");
+$stmt_dechets = $pdo->prepare("SELECT id, type_dechet FROM dechets_collectes");
 $stmt_dechets->execute();
 $dechets = $stmt_dechets->fetchAll();
-var_dump($dechets);
 
 // Récupère les deux dernières collectes
 $stmt_collectes = $pdo->query("
@@ -39,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $type_dechet = $_POST["type-de-dechet"];
     $quantite_dechets = $_POST["quantite"];
 
+
     // Insérer la collecte avec le bénévole sélectionné dans la table collectes
     $stmt_collecte = $pdo->prepare("INSERT INTO collectes (date_collecte, lieu, id_benevole) VALUES (?, ?, ?)");
     if (!$stmt_collecte->execute([$date, $lieu, $benevole_id])) {
@@ -49,8 +49,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id_collecte = $pdo->lastInsertId();
 
     $stmt_insert_dechets = $pdo->prepare("INSERT INTO dechets_collectes (type_dechet, quantite_kg, id_collecte) VALUES (?, ?, ?)");
-    if (!$stmt_insert_dechets->execute([$type_dechet, $quantite_dechets, $id_collecte])) {
-        die('Erreur lors de l\'insertion dans la base de données.');
+
+    for ($i = 0; $i < $nombre_type_dechet; $i++) {
+        if (!$stmt_insert_dechets->execute([$type_dechet, $quantite_dechets, $id_collecte])) {
+            die('Erreur lors de l\'insertion dans la base de données.');
+        }
     }
 
     header("Location: collection_list.php?success");
@@ -125,29 +128,60 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </select>
                 </div>
 
-                <!-- Type de déchet -->
+                <!-- Type de déchet 1 -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
                     <select name="type-de-dechet" required
                             class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Sélectionner un type de déchet</option>
-                        <?php foreach($valeurs as $valeur): ?>
-                            <option value="<?php echo htmlspecialchars($valeur); ?>">
-                                <?php echo htmlspecialchars(ucfirst($valeur)); ?>
+                        <?php foreach ($dechets as $dechet): ?>
+                            <option>
+                                <?= htmlspecialchars($dechet['type_dechet']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
-                <!-- Quantité de dechet -->
+                <!-- Quantité de dechet 1 -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Quantité de déchet (en kg):</label>
                     <input type="number"  min="0" step="0.01" name="quantite"  placeholder="Quantité (kg)" class="w-full p-2 border border-gray-300 rounded-lg" required>
                 </div>
 
-                <button type="button" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow">
+                <!-- Bouton pour ajouter un type de déchet -->
+                <button type="submit" name="bouton-nombre-dechet" onclick="addWaste(nombre_de_ligne)" class="bg-cyan-800 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow">
                     ➕ Ajouter un autre type de déchet
                 </button>
+                <p id="message"></p>
+
+                <script>
+                    let nombre_de_ligne = 1;
+
+                    function addWaste() {
+                        nombre_de_ligne += 1;
+                        console.log(nombre_de_ligne);
+                    }
+                </script>
+
+                <!-- Type de déchet 2 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
+                    <select name="type-de-dechet-2"
+                            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Sélectionner un type de déchet</option>
+                        <?php foreach ($dechets as $dechet): ?>
+                            <option>
+                                <?= htmlspecialchars($dechet['type_dechet']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <!-- Quantité de dechet 2 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Quantité de déchet (en kg):</label>
+                    <input type="number"  min="0" step="0.01" name="quantite-2"  placeholder="Quantité (kg)" class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
 
                 <h3 class="text-2xl font-bold text-blue-900 mb-6">Les collectes les plus anciennes</h3>
 
