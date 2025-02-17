@@ -3,10 +3,12 @@ require 'config.php';
 
 try {
     $stmt = $pdo->query("
-        SELECT c.id, c.date_collecte, c.lieu, b.nom
+        SELECT c.id, c.date_collecte, c.lieu, b.nom, SUM(dc.quantite_kg) AS total
         FROM collectes c
         LEFT JOIN benevoles b ON c.id_benevole = b.id
-        ORDER BY c.date_collecte DESC
+        LEFT JOIN dechets_collectes dc ON c.id = dc.id_collecte
+        GROUP BY c.id, c.date_collecte, c.lieu, b.nom
+        ORDER BY c.date_collecte DESC;
     ");
 
     $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");
@@ -21,9 +23,11 @@ try {
     exit;
 }
 
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 ?>
 
 <!DOCTYPE html>
@@ -104,10 +108,8 @@ error_reporting(E_ALL);
                     <tr class="hover:bg-gray-100 transition duration-200">
                         <td class="py-3 px-4 text-center"><?= date('d/m/Y', strtotime($collecte['date_collecte'])) ?></td>
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($collecte['lieu']) ?></td>
-                        <td class="py-3 px-4 text-center">
-                            <?= $collecte['nom'] ? htmlspecialchars($collecte['nom']) : 'Aucun bénévole' ?>
-                        </td>
-                        <td class="py-3 px-4 text-center"></td>
+                        <td class="py-3 px-4 text-center"><?= $collecte['nom'] ? htmlspecialchars($collecte['nom']) : 'Aucun bénévole' ?></td>
+                        <td class="py-3 px-4 text-center"><?= $collecte['total'] ? htmlspecialchars($collecte['total']) : 'Aucun déchet' ?></td>
                         <td class="py-3 px-4 flex justify-end space-x-2">
                             <a href="collection_edit.php?id=<?= $collecte['id'] ?>" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                                 ✏️ Modifier
