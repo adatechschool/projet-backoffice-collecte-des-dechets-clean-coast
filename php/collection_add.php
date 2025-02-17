@@ -149,19 +149,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
 
                 <!-- Bouton pour ajouter un type de déchet -->
-                <button type="submit" name="bouton-nombre-dechet" onclick="addWaste(nombre_de_ligne)" class="bg-cyan-800 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow">
-                    ➕ Ajouter un autre type de déchet
-                </button>
+<!--                <button type="submit" name="bouton-nombre-dechet" onclick="addWaste(nombre_de_ligne)" class="bg-cyan-800 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow">-->
+<!--                    ➕ Ajouter un autre type de déchet-->
+<!--                </button>-->
+                <select>
+                    <option></option>
+                    <option></option>
+                    <option></option>
+                </select>
                 <p id="message"></p>
-
-                <script>
-                    let nombre_de_ligne = 1;
-
-                    function addWaste() {
-                        nombre_de_ligne += 1;
-                        console.log(nombre_de_ligne);
-                    }
-                </script>
 
                 <!-- Type de déchet 2 -->
                 <div>
