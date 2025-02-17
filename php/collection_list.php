@@ -9,7 +9,7 @@ try {
         ORDER BY c.date_collecte DESC
     ");
 
-    $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");
+    $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin'");
     $query->execute();
 
     $collectes = $stmt->fetchAll();

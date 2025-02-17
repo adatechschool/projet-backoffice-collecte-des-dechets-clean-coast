@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <!-- Type de déchet -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
-                    <select name="type-de-dechet" required
+                    <select name="type-de-dechet"  multiple
                             class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Sélectionner un type de déchet</option>
                         <?php foreach ($dechets as $dechet): ?>
