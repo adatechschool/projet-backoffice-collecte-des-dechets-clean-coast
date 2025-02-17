@@ -92,21 +92,23 @@ error_reporting(E_ALL);
             <table class="w-full table-auto border-collapse">
                 <thead class="bg-blue-800 text-white">
                 <tr>
-                    <th class="py-3 px-4 text-left">Date</th>
-                    <th class="py-3 px-4 text-left">Lieu</th>
-                    <th class="py-3 px-4 text-left">Bénévole Responsable</th>
-                    <th class="py-3 px-4 text-left">Actions</th>
+                    <th class="py-3 px-4 text-center">Date</th>
+                    <th class="py-3 px-4 text-center">Lieu</th>
+                    <th class="py-3 px-4 text-center">Bénévole Responsable</th>
+                    <th class="py-3 px-4 text-center">Total collect</th>
+                    <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-300">
                 <?php foreach ($collectes as $collecte) : ?>
                     <tr class="hover:bg-gray-100 transition duration-200">
-                        <td class="py-3 px-4"><?= date('d/m/Y', strtotime($collecte['date_collecte'])) ?></td>
-                        <td class="py-3 px-4"><?= htmlspecialchars($collecte['lieu']) ?></td>
-                        <td class="py-3 px-4">
+                        <td class="py-3 px-4 text-center"><?= date('d/m/Y', strtotime($collecte['date_collecte'])) ?></td>
+                        <td class="py-3 px-4 text-center"><?= htmlspecialchars($collecte['lieu']) ?></td>
+                        <td class="py-3 px-4 text-center">
                             <?= $collecte['nom'] ? htmlspecialchars($collecte['nom']) : 'Aucun bénévole' ?>
                         </td>
-                        <td class="py-3 px-4 flex space-x-2">
+                        <td class="py-3 px-4 text-center"></td>
+                        <td class="py-3 px-4 flex justify-end space-x-2">
                             <a href="collection_edit.php?id=<?= $collecte['id'] ?>" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                                 ✏️ Modifier
                             </a>
