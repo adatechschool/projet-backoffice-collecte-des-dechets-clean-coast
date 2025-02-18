@@ -3,7 +3,7 @@ require 'config.php';
 
 try {
     $stmt = $pdo->query("
-        SELECT c.id, c.date_collecte, c.lieu, b.nom, SUM(dc.quantite_kg) AS total
+        SELECT c.id, c.date_collecte, c.lieu, b.nom, SUM(round(dc.quantite_kg, 2)) AS total
         FROM collectes c
         LEFT JOIN benevoles b ON c.id_benevole = b.id
         LEFT JOIN dechets_collectes dc ON c.id = dc.id_collecte
