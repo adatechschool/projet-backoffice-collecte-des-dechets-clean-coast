@@ -56,7 +56,6 @@ $benevoles = $query->fetchAll();
                     <th class="py-3 px-4 text-center">Nom</th>
                     <th class="py-3 px-4 text-center">Email</th>
                     <th class="py-3 px-4 text-center">Rôle</th>
-<!--                    <th class="py-3 px-4 text-center">Total collecte</th>-->
                     <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
                 </thead>
@@ -66,7 +65,6 @@ $benevoles = $query->fetchAll();
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($benevole['nom']) ?></td>
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($benevole['email']) ?></td>
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($benevole['role']) ?></td>
-                        <td class="py-3 px-4 text-center"></td>
                         <td class="py-3 px-4 flex justify-center space-x-2">
                             <a href="volunteer_edit.php?id=<?= $benevole['id'] ?>"
                                class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
