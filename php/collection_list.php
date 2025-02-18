@@ -22,6 +22,10 @@ try {
     $dechets->execute();
     $type_et_kilo = $dechets->fetchAll();
 
+    $total_dechet = $pdo->prepare("SELECT SUM(round(quantite_kg, 2)) AS total_dechet FROM dechets_collectes");
+    $total_dechet->execute();
+    $total_kg = $total_dechet->fetch();
+
 }catch (PDOException $e) {
     echo "Erreur de base de données : " . $e->getMessage();
     exit;
@@ -93,6 +97,11 @@ error_reporting(E_ALL);
                 <h3 class="text-xl font-semibold text-gray-800 mb-3">Bénévole Admin</h3>
                 <p class="text-lg text-gray-600"><?= $adminNom ?></p>
             </div>
+            <!-- Total quantité déchets -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Total Déchets Collectés</h3>
+                <p class="text-3xl font-bold text-blue-600"><?= $total_kg['total_dechet'] ?></p>
+            </div>
         </div>
 
         <!-- Tableau des collectes -->
@@ -103,7 +112,7 @@ error_reporting(E_ALL);
                     <th class="py-3 px-4 text-center">Date</th>
                     <th class="py-3 px-4 text-center">Lieu</th>
                     <th class="py-3 px-4 text-center">Bénévole Responsable</th>
-                    <th class="py-3 px-4 text-center">Total collect</th>
+                    <th class="py-3 px-4 text-center">Total collecte</th>
                     <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
                 </thead>
