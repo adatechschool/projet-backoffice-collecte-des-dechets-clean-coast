@@ -99,7 +99,8 @@ error_reporting(E_ALL);
                     <th class="py-3 px-4 text-center">Date</th>
                     <th class="py-3 px-4 text-center">Lieu</th>
                     <th class="py-3 px-4 text-center">Bénévole Responsable</th>
-                    <th class="py-3 px-4 text-center">Total collect</th>
+                    <th class="py-3 px-4 text-center">Type de déchet</th>
+                    <th class="py-3 px-4 text-center">Quantité au kg</th>
                     <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
                 </thead>
@@ -109,6 +110,7 @@ error_reporting(E_ALL);
                         <td class="py-3 px-4 text-center"><?= date('d/m/Y', strtotime($collecte['date_collecte'])) ?></td>
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($collecte['lieu']) ?></td>
                         <td class="py-3 px-4 text-center"><?= $collecte['nom'] ? htmlspecialchars($collecte['nom']) : 'Aucun bénévole' ?></td>
+                        <td class="py-3 px-4 text-center"></td>
                         <td class="py-3 px-4 text-center"><?= $collecte['total'] ? htmlspecialchars($collecte['total']) : 'Aucun déchet' ?></td>
                         <td class="py-3 px-4 flex justify-end space-x-2">
                             <a href="collection_edit.php?id=<?= $collecte['id'] ?>" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
