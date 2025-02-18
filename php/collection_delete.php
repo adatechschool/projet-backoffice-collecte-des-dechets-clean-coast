@@ -25,3 +25,4 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     echo "ID invalide.";
 }
 ?>
+
