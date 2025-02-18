@@ -81,7 +81,7 @@ INSERT INTO `collectes` (`id`, `date_collecte`, `lieu`, `id_benevole`) VALUES
 CREATE TABLE `dechets_collectes` (
   `id` int NOT NULL,
   `id_collecte` int DEFAULT NULL,
-  `type_dechet` enum('plastique', 'verre', 'métal', 'papier', 'organique')  NOT NULL,
+  `type_dechet` varchar(255) NOT NULL,
   `quantite_kg` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

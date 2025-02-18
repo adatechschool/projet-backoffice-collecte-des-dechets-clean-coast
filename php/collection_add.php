@@ -10,8 +10,8 @@ $stmt_benevoles->execute();
 $benevoles = $stmt_benevoles->fetchAll();
 
 // Récupère la liste des déchets dans la table dechets_collectes et on affiche dans le select
-// Peut-être passer par une nouvelle table ?
-$stmt_dechets = $pdo->prepare("SELECT id, type_dechet FROM dechets_collectes");
+// Peut-être passer par une nouvelle table et utiliser le DISTINCT?
+$stmt_dechets = $pdo->prepare("SELECT DISTINCT type_dechet FROM dechets_collectes");
 $stmt_dechets->execute();
 $dechets = $stmt_dechets->fetchAll();
 
@@ -32,12 +32,21 @@ $stmt_collectes->execute();
 $collectes = $stmt_collectes->fetchAll();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+//    echo "<pre>";
+//    print_r($_POST);
+//    echo "</pre>";
+//    die();
+
     $date = $_POST["date"];
     $lieu = $_POST["lieu"];
     $benevole_id = $_POST["benevole"];  // ID du bénévole choisi, modifié ici pour correspondre au formulaire
-    $type_dechet = $_POST["type-de-dechet"];
-    $quantite_dechets = $_POST["quantite"];
 
+//    $lignes = intval($_POST['numberOfInputs'] ?? 0);
+
+    // Debug - Afficher les données reçues
+    error_log("Nombre de lignes : " . $lignes);
+    error_log("Types reçus : " . print_r($_POST['type'], true));
+    error_log("Quantités reçues : " . print_r($_POST['quantite'], true));
 
     // Insérer la collecte avec le bénévole sélectionné dans la table collectes
     $stmt_collecte = $pdo->prepare("INSERT INTO collectes (date_collecte, lieu, id_benevole) VALUES (?, ?, ?)");
@@ -50,10 +59,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $stmt_insert_dechets = $pdo->prepare("INSERT INTO dechets_collectes (type_dechet, quantite_kg, id_collecte) VALUES (?, ?, ?)");
 
-    for ($i = 0; $i < $nombre_type_dechet; $i++) {
-        if (!$stmt_insert_dechets->execute([$type_dechet, $quantite_dechets, $id_collecte])) {
-            die('Erreur lors de l\'insertion dans la base de données.');
-        }
+    for ($i = 0; $i < count($_POST['type']); $i++) {
+        $type = $_POST['type'][$i];
+        $quantite = $_POST['quantite'][$i];
+
+        $stmt_insert_dechets->execute([$type, $quantite, $id_collecte]);
     }
 
     header("Location: collection_list.php?success");
@@ -128,82 +138,75 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </select>
                 </div>
 
+                <!-- Select pour indiquez le nombre de type de déchets -->
+                <label class="block text-sm font-medium text-gray-700">Nombre de type de déchet :</label>
+                <input type="number" id="input-number-type" min="0" step="0.01" name="nombre-type"  placeholder="Indiquez le nombre de type de déchet à ajouter" class="w-full p-2 border border-gray-300 rounded-lg" required>
+                <button id="btn-validate" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow">Valider</button>
+
                 <!-- Type de déchet 1 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
-                    <select name="type-de-dechet" required
-                            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Sélectionner un type de déchet</option>
-                        <?php foreach ($dechets as $dechet): ?>
-                            <option>
-                                <?= htmlspecialchars($dechet['type_dechet']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                <template id="template-inputs-waste">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
+                        <select name="type[]" required
+                                class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Sélectionner un type de déchet</option>
+                            <?php foreach ($dechets as $dechet): ?>
+                                <option>
+                                    <?= htmlspecialchars($dechet['type_dechet']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
                 <!-- Quantité de dechet 1 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Quantité de déchet (en kg):</label>
-                    <input type="number"  min="0" step="0.01" name="quantite"  placeholder="Quantité (kg)" class="w-full p-2 border border-gray-300 rounded-lg" required>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Quantité de déchet (en kg):</label>
+                        <input type="number" min="0" step="0.01" name="quantite[]"  placeholder="Quantité (kg)" class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    </div>
+                </template>
 
-                <!-- Bouton pour ajouter un type de déchet -->
-<!--                <button type="submit" name="bouton-nombre-dechet" onclick="addWaste(nombre_de_ligne)" class="bg-cyan-800 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow">-->
-<!--                    ➕ Ajouter un autre type de déchet-->
-<!--                </button>-->
-                <select>
-                    <option></option>
-                    <option></option>
-                    <option></option>
-                </select>
+                <div id="add-inputs"></div>
+
                 <p id="message"></p>
 
-                <!-- Type de déchet 2 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Type de déchet :</label>
-                    <select name="type-de-dechet-2"
-                            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Sélectionner un type de déchet</option>
-                        <?php foreach ($dechets as $dechet): ?>
-                            <option>
-                                <?= htmlspecialchars($dechet['type_dechet']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                <script>
+                    const inputNumberType = document.querySelector("#input-number-type");
+                    const btnValidate = document.querySelector("#btn-validate");
+                    const divInputs = document.querySelector("#add-inputs")
+                    const template = document.querySelector("#template-inputs-waste");
 
-                <!-- Quantité de dechet 2 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Quantité de déchet (en kg):</label>
-                    <input type="number"  min="0" step="0.01" name="quantite-2"  placeholder="Quantité (kg)" class="w-full p-2 border border-gray-300 rounded-lg">
-                </div>
+                    let numberOfInputs = 0;
 
-                <h3 class="text-2xl font-bold text-blue-900 mb-6">Les collectes les plus anciennes</h3>
+                    function addNumberType() {
+                        // Empêcher le comportement par défaut du formulaire
+                        event.preventDefault();
 
-                <!-- Tableau des collectes passées -->
-                <div class="overflow-hidden rounded-lg shadow-lg bg-white">
-                    <table class="w-full table-auto border-collapse">
-                        <thead class="bg-gray-500 text-white">
-                        <tr>
-                            <th class="py-3 px-4 text-left">Lieu de la collecte</th>
-                            <th class="py-3 px-4 text-left">Quantité de déchets collectés</th>
-                            <th class="py-3 px-4 text-left">Date</th>
-                            <th class="py-3 px-4 text-left">Bénévole</th>
-                        </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-300">
-                        <?php foreach ($collectes as $collecte) : ?>
-                            <tr class="hover:bg-gray-100 transition duration-200">
-                                <td class="py-3 px-4"><?= htmlspecialchars($collecte['lieu']); ?></td>
-                                <td class="py-3 px-4"><?= $collecte['total_dechets'] ? htmlspecialchars($collecte['total_dechets']) . ' kg' : 'Aucun déchet enregistré'; ?></td>
-                                <td class="py-3 px-4"><?= htmlspecialchars($collecte['date_collecte']); ?></td>
-                                <td class="py-3 px-4"><?= htmlspecialchars($collecte['nom_benevole']); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                        // Conversion de la valeur en nombre
+                        let add = parseInt(inputNumberType.value);
+
+                        numberOfInputs = add;
+
+                        console.log('Nombre total :', numberOfInputs);
+
+                        for (let i = 0; i < numberOfInputs; i++) {
+                            // Ici template
+                            // template.querySelector('label').textContent = `Type de déchet ${i + 1}:`;
+                            divInputs.appendChild(template.content.cloneNode(true));
+                        }
+
+                        fetch('collection_add.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: 'numberOfInputs=' + numberOfInputs
+                        })
+
+                        return numberOfInputs;
+                    }
+
+                    btnValidate.addEventListener("click", addNumberType);
+                </script>
 
                 <!-- Boutons -->
                 <div class="flex justify-end space-x-4">
