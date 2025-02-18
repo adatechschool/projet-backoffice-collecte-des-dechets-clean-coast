@@ -56,7 +56,7 @@ $benevoles = $query->fetchAll();
                     <th class="py-3 px-4 text-center">Nom</th>
                     <th class="py-3 px-4 text-center">Email</th>
                     <th class="py-3 px-4 text-center">Rôle</th>
-                    <th class="py-3 px-4 text-center">Total collecte</th>
+<!--                    <th class="py-3 px-4 text-center">Total collecte</th>-->
                     <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
                 </thead>
