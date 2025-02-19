@@ -3,11 +3,11 @@ require 'config.php';
 
 try {
     $stmt = $pdo->query("
-        SELECT c.id, c.date_collecte, c.lieu, b.nom, dc.type_dechet, SUM(round(dc.quantite_kg,2)) AS total
+        SELECT c.id, c.date_collecte, c.lieu, b.nom, GROUP_CONCAT(dc.type_dechet ORDER BY dc.type_dechet SEPARATOR ' , ') AS types_dechets, SUM(round(dc.quantite_kg,2)) AS total
         FROM collectes c
         LEFT JOIN benevoles b ON c.id_benevole = b.id
         LEFT JOIN dechets_collectes dc ON c.id = dc.id_collecte
-        GROUP BY c.id, c.date_collecte, c.lieu, b.nom, dc.type_dechet
+        GROUP BY c.id, c.date_collecte, c.lieu, b.nom
         ORDER BY c.date_collecte DESC;
     ");
 
@@ -15,6 +15,7 @@ try {
     $query->execute();
 
     $collectes = $stmt->fetchAll();
+//    print_r($collectes);
     $admin = $query->fetch(PDO::FETCH_ASSOC);
     $adminNom = $admin ? htmlspecialchars($admin['nom']) : 'Aucun administrateur trouvé';
 
@@ -119,7 +120,7 @@ error_reporting(E_ALL);
                         <td class="py-3 px-4 text-center"><?= date('d/m/Y', strtotime($collecte['date_collecte'])) ?></td>
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($collecte['lieu']) ?></td>
                         <td class="py-3 px-4 text-center"><?= $collecte['nom'] ? htmlspecialchars($collecte['nom']) : 'Aucun bénévole' ?></td>
-                        <td class="py-3 px-4 text-center"><?= $collecte['type_dechet'] ? htmlspecialchars($collecte['type_dechet']) : 'Aucun déchet' ?></td>
+                        <td class="py-3 px-4 text-center"><?= $collecte['types_dechets'] ? htmlspecialchars($collecte['types_dechets']) : 'Aucun déchet' ?></td>
                         <td class="py-3 px-4 text-center"><?= $collecte['total'] ? htmlspecialchars($collecte['total']) : 'Aucun déchet' ?></td>
                         <td class="py-3 px-4 flex justify-end space-x-2">
                             <a href="collection_edit.php?id=<?= $collecte['id'] ?>" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
