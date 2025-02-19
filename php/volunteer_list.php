@@ -3,10 +3,16 @@
 require 'config.php';
 
 // Afficher les bénévoles (id, nom, email et role)
-$query = $pdo->prepare("SELECT id, nom, email, role FROM benevoles ORDER BY nom");
+$query = $pdo->prepare("
+SELECT b.id, b.nom, b.email, b.role, SUM(round(dc.quantite_kg, 2)) AS total
+FROM benevoles b
+LEFT JOIN collectes c ON b.id = c.id_benevole
+LEFT JOIN dechets_collectes dc ON c.id = dc.id_collecte
+GROUP BY b.id, b.nom, b.email, b.role
+ORDER BY b.nom ASC");
 $query->execute();
-
 $benevoles = $query->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -56,6 +62,7 @@ $benevoles = $query->fetchAll();
                     <th class="py-3 px-4 text-center">Nom</th>
                     <th class="py-3 px-4 text-center">Email</th>
                     <th class="py-3 px-4 text-center">Rôle</th>
+                    <th class="py-3 px-4 text-center">Quantité collecté</th>
                     <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
                 </thead>
@@ -65,6 +72,7 @@ $benevoles = $query->fetchAll();
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($benevole['nom']) ?></td>
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($benevole['email']) ?></td>
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($benevole['role']) ?></td>
+                        <td class="py-3 px-4 text-center"><?= $benevole['total'] ? htmlspecialchars($benevole['total']) : 'Aucun déchet'?></td>
                         <td class="py-3 px-4 flex justify-center space-x-2">
                             <a href="volunteer_edit.php?id=<?= $benevole['id'] ?>"
                                class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">

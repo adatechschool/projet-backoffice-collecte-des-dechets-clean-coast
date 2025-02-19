@@ -11,7 +11,7 @@ try {
         ORDER BY c.date_collecte DESC;
     ");
 
-    $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin' LIMIT 1");
+    $query = $pdo->prepare("SELECT nom FROM benevoles WHERE role = 'admin'");
     $query->execute();
 
     $collectes = $stmt->fetchAll();
@@ -22,7 +22,7 @@ try {
     $total_dechet->execute();
     $total_kg = $total_dechet->fetch();
 
-} catch (PDOException $e) {
+}catch (PDOException $e) {
     echo "Erreur de base de données : " . $e->getMessage();
     exit;
 }
