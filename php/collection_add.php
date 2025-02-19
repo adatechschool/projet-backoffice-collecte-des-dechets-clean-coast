@@ -10,7 +10,7 @@ $stmt_benevoles->execute();
 $benevoles = $stmt_benevoles->fetchAll();
 
 // Récupère la liste des déchets dans la table dechets_collectes et on affiche dans le select
-$stmt_dechets = $pdo->query("SELECT DISTINCT id, type_dechet FROM dechets_collectes");
+$stmt_dechets = $pdo->query("SELECT DISTINCT type_dechet FROM dechets_collectes");
 $stmt_dechets->execute();
 $dechets = $stmt_dechets->fetchAll();
 
