@@ -22,7 +22,7 @@ $benevoles = $query->fetchAll();
 <div class="flex h-screen">
     <!-- Barre de navigation -->
     <div class="bg-cyan-800 text-white w-64 p-6">
-        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+        <h2 class="text-2xl font-bold mb-6">Tableau de bord</h2>
             <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i
                             class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
             <li><a href="collection_add.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i
@@ -56,7 +56,6 @@ $benevoles = $query->fetchAll();
                     <th class="py-3 px-4 text-center">Nom</th>
                     <th class="py-3 px-4 text-center">Email</th>
                     <th class="py-3 px-4 text-center">Rôle</th>
-<!--                    <th class="py-3 px-4 text-center">Total collecte</th>-->
                     <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
                 </thead>
@@ -66,7 +65,6 @@ $benevoles = $query->fetchAll();
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($benevole['nom']) ?></td>
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($benevole['email']) ?></td>
                         <td class="py-3 px-4 text-center"><?= htmlspecialchars($benevole['role']) ?></td>
-                        <td class="py-3 px-4 text-center"></td>
                         <td class="py-3 px-4 flex justify-center space-x-2">
                             <a href="volunteer_edit.php?id=<?= $benevole['id'] ?>"
                                class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">

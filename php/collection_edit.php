@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <div class="flex h-screen">
     <!-- Dashboard -->
     <div class="bg-cyan-800 text-white w-64 p-6">
-        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+        <h2 class="text-2xl font-bold mb-6">Tableau de bord</h2>
         <ul>
             <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg">Tableau de bord</a></li>
             <li><a href="volunteer_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg">Liste des bénévoles</a></li>

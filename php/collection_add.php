@@ -65,7 +65,7 @@ $dechets = $stmt_dechets->fetchAll();
 
 <div class="flex h-screen">
     <div class="bg-cyan-800 text-white w-64 p-6">
-        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+        <h2 class="text-2xl font-bold mb-6">Tableau de bord</h2>
 
             <li><a href="collection_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord</a></li>
             <li><a href="volunteer_list.php" class="flex items-center py-2 px-3 hover:bg-blue-800 rounded-lg"><i class="fa-solid fa-list mr-3"></i> Liste des bénévoles</a></li>
