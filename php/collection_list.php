@@ -15,7 +15,6 @@ try {
     $query->execute();
 
     $collectes = $stmt->fetchAll();
-//    print_r($collectes);
     $admin = $query->fetch(PDO::FETCH_ASSOC);
     $adminNom = $admin ? htmlspecialchars($admin['nom']) : 'Aucun administrateur trouvé';
 
