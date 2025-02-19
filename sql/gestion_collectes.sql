@@ -153,13 +153,15 @@ ALTER TABLE `dechets_collectes`
 --
 ALTER TABLE `collectes`
   ADD CONSTRAINT `collectes_ibfk_1` FOREIGN KEY (`id_benevole`) REFERENCES `benevoles` (`id`)
-    ON DELETE SET NULL ;
+  ON DELETE SET NULL;
 
 --
 -- Contraintes pour la table `dechets_collectes`
 --
 ALTER TABLE `dechets_collectes`
-  ADD CONSTRAINT `dechets_collectes_ibfk_1` FOREIGN KEY (`id_collecte`) REFERENCES `collectes` (`id`);
+  ADD CONSTRAINT `dechets_collectes_ibfk_1` FOREIGN KEY (`id_collecte`) REFERENCES `collectes` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
